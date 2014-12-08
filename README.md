@@ -4,6 +4,8 @@ This project lets you execute untrusted source code in a safe environment. You s
 
 The vm is only exposed through a forwarded port (for the internal code runner) this bases its (network) security on the `restrict=y` feature for host-guest network isolation in qemu. It should be noted that qemu had [security issues](http://www.cvedetails.com/vulnerability-list/vendor_id-7506/Qemu.html) in the past that could potentially lead an attacker to gain access on the host.
 
+The vm is running debian GNU/linux, the disk image is hosted [seperatly](http://apoc.cc/rccvm/).
+
 Check the github wiki for a detailed api documentation.
 
 ## Example Task Request (Queue)
