@@ -1,0 +1,24 @@
+{
+    "web_bind_port": 9900,
+    "web_bind_host": "127.0.0.1",
+    "client_timeout": 5000,
+    "bypass_task_queue": false,
+    
+    "vm": {
+        "wd": ".",
+    
+        "qemu_command": "/usr/bin/qemu-system-x86_64",
+        "monitor_port": 9901,
+        
+        "image": "./firmware/rccvm-firmware.qcow2",
+        "daemon_guest_port": 5000,
+        "daemon_host_port": 9902,
+        
+        "memory": 128,
+        
+        "enable_kvm": true,
+        "enable_vnc": false,
+        "vnc_host": "127.0.0.1",
+        "vnc_display": 5
+    }
+}
