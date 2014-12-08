@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
 
 import cc.apoc.rccvm.qemu.VirtualMachine;
@@ -26,7 +28,7 @@ public class TaskQueue extends Thread {
 		// pass-through request we sent to internal
 		String request;
 		@Expose
-		String response;
+		JsonObject response;
 		
 		@Expose
 		Date createdAt;
@@ -50,6 +52,10 @@ public class TaskQueue extends Thread {
 		public String toJson() {
 			return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().
 					create().toJson(this);
+		}
+
+		public void setResponseText(String data) {
+			response = new JsonParser().parse(data).getAsJsonObject();
 		}
 	}
 	
@@ -110,7 +116,7 @@ public class TaskQueue extends Thread {
 				task.startedAt = new Date();
 				
 				try {
-					task.response = internal.post("/execute", task.request);
+					task.setResponseText(internal.post("/execute", task.request));
 					logger.info(task.toString() + " completed");
 				}
 				catch (Exception e) {
