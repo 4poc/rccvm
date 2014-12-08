@@ -54,7 +54,7 @@ public class MonitorClient {
     private String execute(String command, boolean noResponse) {
         String response = "";
         try {
-            writeLine(command + "\n");
+            writeLine(command);
             readLine(); // the monitor echos the command
 
             String buffer = "";
