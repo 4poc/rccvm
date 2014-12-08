@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
 
 import cc.apoc.rccvm.qemu.VirtualMachine;
 
@@ -18,15 +20,21 @@ public class TaskQueue extends Thread {
 	private static final Logger logger = LoggerFactory.getLogger("rccvm.core");
 	
 	public static class Task {
+		@Expose
 		UUID id;
 		
 		// pass-through request we sent to internal
 		String request;
+		@Expose
 		String response;
 		
+		@Expose
 		Date createdAt;
+		@Expose
 		Date startedAt;
+		@Expose
 		Date finishedAt;
+		@Expose
 		boolean terminated;
 		
 		public Task(String request) {
@@ -40,7 +48,8 @@ public class TaskQueue extends Thread {
 		}
 		
 		public String toJson() {
-			return new Gson().toJson(this);
+			return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().
+					create().toJson(this);
 		}
 	}
 	
