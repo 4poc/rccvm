@@ -56,7 +56,7 @@ The task can then be queried by `GET /task/6dc3ab8c-b2d6-44c5-809e-9b465d56f039`
 
 ## Example Task Request
 
-If the config option `bypass_task_queue` is true the vm is directly exposed, requests are directly submitted to the vm without any queueing.
+If the config option `bypass_task_queue` is true the vm is directly exposed, requests are directly submitted to the vm without any queuing.
 
 ```
 curl -s -d '{
