@@ -109,6 +109,7 @@ public class VirtualMachine {
                 stop();
                 return false;
             }
+
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -125,12 +126,12 @@ public class VirtualMachine {
         int tries = 10;
         while (tries > 0) {
             if (monitor.connect()) {
-                logger.info("connected to monitor");
+                logger.info(String.format("connected to monitor (tries=%d)", tries));
                 return true;
             }
 
             try {
-                Thread.sleep(250);
+                Thread.sleep(100);
                 tries--;
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block

@@ -10,13 +10,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
+import cc.apoc.rccvm.qemu.VirtualMachine;
+
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
-
-import cc.apoc.rccvm.qemu.VirtualMachine;
 
 public class TaskQueue extends Thread {
     private static final Logger logger = LoggerFactory.getLogger("rccvm.core");
@@ -125,5 +124,29 @@ public class TaskQueue extends Thread {
             }
         }
 
+    }
+
+    public boolean waitForInternal() {
+        logger.info("waiting for internal service to become ready");
+
+        int tries = 20;
+        while (tries > 0) {
+            if (internal.get("/backends") != null) {
+                logger.info(String.format("internal service ready, received response (tries=%d)",
+                        tries));
+                return true;
+            }
+
+            try {
+                Thread.sleep(1000);
+                tries--;
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                break;
+            }
+        }
+        logger.error("internal service not ready!");
+        return false;
     }
 }

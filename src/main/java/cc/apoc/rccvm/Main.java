@@ -1,12 +1,14 @@
 package cc.apoc.rccvm;
 
 import java.net.InetSocketAddress;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import cc.apoc.rccvm.qemu.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import cc.apoc.rccvm.qemu.VirtualMachine;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger("rccvm.core");
@@ -29,6 +31,10 @@ public class Main {
         }
         queue = new TaskQueue(config, vm);
         queue.start();
+        if (!queue.waitForInternal()) {
+            vm.stop();
+            return;
+        }
 
         logger.info("start web server");
 
