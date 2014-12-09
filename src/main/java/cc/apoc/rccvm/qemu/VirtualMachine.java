@@ -17,68 +17,68 @@ import org.slf4j.LoggerFactory;
  * @author apoc
  */
 public class VirtualMachine {
-	private static final Logger logger = LoggerFactory.getLogger("rccvm.qemu");
-	
-	public static class Config {
-		String wd;
-		String qemu_command;
-		int monitor_port;
-		
-		String image;
-		int daemon_guest_port;
-		public int daemon_host_port;
-		
-		int memory;
-		
-		boolean enable_kvm;
-		boolean enable_vnc;
-		
-		String vnc_host;
-		int vnc_display;
-	}
-	
+    private static final Logger logger = LoggerFactory.getLogger("rccvm.qemu");
+
+    public static class Config {
+        String wd;
+        String qemu_command;
+        int monitor_port;
+
+        String image;
+        int daemon_guest_port;
+        public int daemon_host_port;
+
+        int memory;
+
+        boolean enable_kvm;
+        boolean enable_vnc;
+
+        String vnc_host;
+        int vnc_display;
+    }
+
     QemuCommandBuilder command;
-    
+
     private Process process;
 
     private MonitorClient monitor;
 
     private BufferedReader bufferedInputStream;
     private BufferedReader bufferedErrorStream;
-    
+
     /**
-     * Holds the last messages received over the serial console, those
-     * messages are logged by logStreams aswell.
+     * Holds the last messages received over the serial console, those messages
+     * are logged by logStreams aswell.
      * 
-     * The guest can write arbitary messages on this console. Might be
-     * useful in the future.
+     * The guest can write arbitary messages on this console. Might be useful in
+     * the future.
      */
     private List<String> serialConsoleMessages;
 
     public VirtualMachine(VirtualMachine.Config config) {
-    	serialConsoleMessages = new LinkedList<String>();
-    	command = new QemuCommandBuilder(config.wd, config.qemu_command);
+        serialConsoleMessages = new LinkedList<String>();
+        command = new QemuCommandBuilder(config.wd, config.qemu_command);
 
-    	command.addDiskImage(config.image);
-        
+        command.addDiskImage(config.image);
+
         // forward guest rccvmd port (5000) to the host
-    	command.addHostFwd(config.daemon_host_port, config.daemon_guest_port);
+        command.addHostFwd(config.daemon_host_port, config.daemon_guest_port);
 
         // open monitor (with nowait)
-    	command.addMonitorPort(config.monitor_port, true);
+        command.addMonitorPort(config.monitor_port, true);
 
-    	command.addMemory(config.memory);
+        command.addMemory(config.memory);
 
-    	if (config.enable_kvm)
-    		command.addEnableKVM();
-    	if (config.enable_vnc)
-    		command.addVNC(config.vnc_host, config.vnc_display);
-    	
+        if (config.enable_kvm)
+            command.addEnableKVM();
+        if (config.enable_vnc)
+            command.addVNC(config.vnc_host, config.vnc_display);
+
         monitor = new MonitorClient(config.monitor_port);
-        
-    	if (monitor.connect()) {
-    		monitor.sendPowerdown();
-    	}
+
+        if (monitor.connect()) {
+            monitor.sendPowerdown();
+        }
     }
 
     public boolean start() {
@@ -88,29 +88,29 @@ public class VirtualMachine {
 
         // disk changes are stored in a snapshot:
         command.addSnapshot();
-        
+
         ProcessBuilder pb = command.createProcessBuilder();
 
         if (pb == null) {
-        	logger.error("unable to start vm!");
+            logger.error("unable to start vm!");
             return false;
         }
-        
+
         pb.directory(new File(command.getWorkingDir()));
-        
+
         try {
             process = pb.start();
-            
+
             startStreams();
 
-            // blocks until the monitor is available (until it can connect to it):
+            // blocks until the monitor is available (until it can connect to
+            // it):
             if (!waitForMonitor()) {
                 stop();
                 return false;
             }
-        }
-        catch (IOException e) {
-			// TODO Auto-generated catch block
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
             stop();
             return false;
@@ -121,22 +121,22 @@ public class VirtualMachine {
 
     private boolean waitForMonitor() {
         logger.info("waiting for monitor service to become ready");
-        
+
         int tries = 10;
         while (tries > 0) {
-        	if (monitor.connect()) {
-        		logger.info("connected to monitor");
-        		return true;
-        	}
-        	
-        	try {
-				Thread.sleep(250);
-				tries--;
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				break;
-			}
+            if (monitor.connect()) {
+                logger.info("connected to monitor");
+                return true;
+            }
+
+            try {
+                Thread.sleep(250);
+                tries--;
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                break;
+            }
         }
         logger.error("error connecting to monitor");
         return false;
@@ -156,21 +156,20 @@ public class VirtualMachine {
         logStreams();
         logger.info("stopping vm qemu process");
         if (process != null) {
-        	if (monitor.isConnected()) {
-        		monitor.sendPowerdown();
-        		monitor.close();
-        	}
-            try {
-            	Thread.sleep(250);
-            	// TODO: this is kinda weird sequence to stop the vm
-            	logger.info("qemu process exit code was: " + process.exitValue());
+            if (monitor.isConnected()) {
+                monitor.sendPowerdown();
+                monitor.close();
             }
-            catch (IllegalThreadStateException e) {
-            	logger.info("qemu process is still running");
+            try {
+                Thread.sleep(250);
+                // TODO: this is kinda weird sequence to stop the vm
+                logger.info("qemu process exit code was: " + process.exitValue());
+            } catch (IllegalThreadStateException e) {
+                logger.info("qemu process is still running");
             } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             logger.info("process.destory");
             process.destroy();
         }
@@ -194,14 +193,15 @@ public class VirtualMachine {
         logger.debug("input stream:");
         logStream(this.bufferedInputStream, true);
     }
-    
+
     /**
      * Logs stream messages from the specified buffered reader.
      * 
-     * If appendSerial is true, the messages are also appended to
-     * the serialConsoleMessages attribute.
+     * If appendSerial is true, the messages are also appended to the
+     * serialConsoleMessages attribute.
      * 
-     * @param br  a buffered reader to read from.
+     * @param br
+     *            a buffered reader to read from.
      * @param appendSerial
      */
     private void logStream(BufferedReader br, boolean appendSerial) {
@@ -210,19 +210,18 @@ public class VirtualMachine {
                 while (br.ready()) {
                     String line = br.readLine();
                     logger.debug("vm> " + line);
-                    
+
                     if (appendSerial) {
                         serialConsoleMessages.add(line);
                     }
                 }
             }
-        }
-        catch (IOException e) {
-			// TODO Auto-generated catch block
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-    
+
     public List<String> getSerialConsoleMessages() {
         return serialConsoleMessages;
     }
@@ -235,13 +234,14 @@ public class VirtualMachine {
     }
 
     /**
-     * Does a system-powerdown on the specified machine, this should trigger a proper shutdown.
+     * Does a system-powerdown on the specified machine, this should trigger a
+     * proper shutdown.
      * 
      * Does not work currently because for some reason acpid is not working.
      * TODO: its now using monitor not qmp, does it still not work?
      */
     public void powerdown() {
-    	monitor.sendPowerdown();
+        monitor.sendPowerdown();
     }
 
     public boolean running() {
@@ -257,6 +257,6 @@ public class VirtualMachine {
     }
 
     public MonitorClient getMonitorClient() {
-    	return monitor;
+        return monitor;
     }
 }

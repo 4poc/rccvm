@@ -16,9 +16,10 @@ public class Utils {
         }
         return sb.toString();
     }
-    
+
     /**
      * Returns the path relative to the base.
+     * 
      * @param patha
      * @param pathb
      * @return
