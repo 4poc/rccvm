@@ -67,11 +67,13 @@ public class Servlet extends HttpServlet {
 
 		}
 		catch (Exception e) {
-			logger.error("servlet request error", e);
+			logger.error("servlet request error, " + e.toString());
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			content = String.format("{\"error\": %s}", new Gson().toJson(e.getMessage()));
+			return;
 		}
 		
+		response.setStatus(HttpServletResponse.SC_OK);
 		response.getWriter().println(content);
 	}
 	

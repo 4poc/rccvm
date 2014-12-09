@@ -31,7 +31,7 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>
-			<version>9.3.0.M1</version>
+			<version>9.2.1.v20140609</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
