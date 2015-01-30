@@ -2,6 +2,9 @@ import os
 from os.path import dirname, join
 import shutil
 import uuid
+import logging
+
+logger = logging.getLogger('rccvm')
 
 class RequestFiles(object):
     def __init__(self, files):
@@ -11,13 +14,13 @@ class RequestFiles(object):
     def store(self):
         for filename, contents in self.files.iteritems():
             filename = join(self.path, filename)
-            print 'store file: '+filename
+            logger.info('store file: '+filename)
             os.makedirs(dirname(filename))
             with open(filename, 'w') as f:
                 f.write(contents['data'])
-                print 'store in file data: '+contents['data']
+                logger.info('store in file data: '+contents['data'])
 
     def destroy(self):
-        print 'destroy stored request files: ' + self.path
+        logger.info('destroy stored request files: ' + self.path)
         shutil.rmtree(self.path)
 

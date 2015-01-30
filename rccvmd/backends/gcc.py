@@ -12,6 +12,6 @@ class GCCBackend(BackendBase):
 registry.append({
     'name': 'gcc',
     'class': GCCBackend,
-    'description': 'the GNU c/c++ compiler.'
+    'description': 'the GNU c/c++ compiler'
 })
 

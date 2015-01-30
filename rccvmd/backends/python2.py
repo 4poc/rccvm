@@ -1,17 +1,17 @@
 from backend import BackendBase, registry
 
-class TCLBackend(BackendBase):
+class Python2Backend(BackendBase):
     def compile(self, argv=None, env={}):
         pass
 
     def run(self, argv=None, env={}):
-        if not argv: argv = ['tclsh', 'main.tcl']
+        if not argv: argv = ['python2', 'main.py']
         return self.popen(argv, env)
 
 registry.append({
-    'name': 'tcl',
-    'class': TCLBackend,
-    'description': 'the tool command language'
+    'name': 'python2',
+    'class': Python2Backend,
+    'description': 'the general-purpose language'
 })
 
 

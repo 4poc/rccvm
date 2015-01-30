@@ -1,17 +1,17 @@
 from backend import BackendBase, registry
 
-class PythonBackend(BackendBase):
+class PerlBackend(BackendBase):
     def compile(self, argv=None, env={}):
         pass
 
     def run(self, argv=None, env={}):
-        if not argv: argv = ['python', 'main.py']
+        if not argv: argv = ['perl', 'main.pl']
         return self.popen(argv, env)
 
 registry.append({
-    'name': 'python',
-    'class': PythonBackend,
-    'description': 'the general-purpose language python.'
+    'name': 'perl',
+    'class': PerlBackend,
+    'description': 'the general-purpose dynamic programming language'
 })
 
 
