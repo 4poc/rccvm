@@ -8,8 +8,6 @@ Within the vm runs a code dispatching server that is exposed through a forwarded
 
 The vm is running Debian GNU/Linux, the disk image is hosted [separately](http://apoc.cc/rccvm/).
 
-Check the github wiki for a detailed api documentation.
-
 ## Example Task Request (Queue)
 
 Here is a simple example that uses the task queue which asynchronously executes the code:
