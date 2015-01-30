@@ -24,6 +24,25 @@ class GCCBackendTest(unittest.TestCase):
                 """}}})
         self.assertEquals(res['run']['stdout'], 'Hello World')
 
+class CPPBackendTest(unittest.TestCase):
+
+    def setUp(self):
+        self.runner = backend.Runner()
+
+    def test_compile(self):
+        res = self.runner.delegate({
+            'backend': 'cpp',
+            'files': {
+                'main.cpp': {'data': """
+                    #include <iostream>
+                    using namespace std;
+                    int main() {
+                      cout << "Hello World" << endl;
+                      return 0;
+                    }
+                """}}})
+        self.assertEquals(res['run']['stdout'], 'Hello World\n')
+
 class Python2BackendTest(unittest.TestCase):
 
     def setUp(self):
@@ -125,6 +144,43 @@ class PerlBackendTest(unittest.TestCase):
             'files': {
                 'main.pl': {'data': 'print "Hello World"'}}})
         self.assertEquals(res['run']['stdout'], 'Hello World')
+
+class BashBackendTest(unittest.TestCase):
+
+    def setUp(self):
+        self.runner = backend.Runner()
+
+    def test_compile(self):
+        res = self.runner.delegate({
+            'backend': 'bash',
+            'files': {
+                'main.sh': {'data': 'echo "Hello World"'}}})
+        self.assertEquals(res['run']['stdout'], 'Hello World\n')
+
+class PHPBackendTest(unittest.TestCase):
+
+    def setUp(self):
+        self.runner = backend.Runner()
+
+    def test_compile(self):
+        res = self.runner.delegate({
+            'backend': 'php',
+            'files': {
+                'main.php': {'data': '<?php echo "Hello World";'}}})
+        self.assertEquals(res['run']['stdout'], 'Hello World')
+
+class ClojureBackendTest(unittest.TestCase):
+
+    def setUp(self):
+        self.runner = backend.Runner()
+
+    def test_compile(self):
+        res = self.runner.delegate({
+            'backend': 'clojure',
+            'files': {
+                'main.clj': {'data': '(println "Hello World")'}}})
+        self.assertEquals(res['run']['stdout'], 'Hello World\n')
+
 
 if __name__ == '__main__':
     unittest.main()

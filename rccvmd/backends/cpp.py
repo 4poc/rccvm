@@ -1,8 +1,8 @@
 from backend import BackendBase, registry
 
-class GCCBackend(BackendBase):
+class CPPBackend(BackendBase):
     def compile(self, argv=None, env={}):
-        if not argv: argv = ['gcc', 'main.c']
+        if not argv: argv = ['g++', 'main.cpp']
         return self.popen(argv, env)
 
     def run(self, argv=None, env={}):
@@ -10,8 +10,8 @@ class GCCBackend(BackendBase):
         return self.popen(argv, env)
 
 registry.append({
-    'name': 'gcc',
-    'class': GCCBackend,
-    'description': 'The GNU C compiler'
+    'name': 'cpp',
+    'class': CPPBackend,
+    'description': 'The GNU C++ compiler'
 })
 
