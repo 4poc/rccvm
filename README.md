@@ -8,6 +8,19 @@ Within the vm runs a code dispatching server that is exposed through a forwarded
 
 The vm is running Debian GNU/Linux, the disk image is hosted [separately](http://apoc.cc/rccvm/).
 
+## Try It
+
+To try it out you can query the bot 'rccvm' on either Freenode or Quakenet IRC:
+
+```
+<you> /msg rccvm help rccvm
+<rccvm> execute code: (lang)> (code) | languages: python2 (py), python3 (py3), scala (sc), tcl (tcl), ruby (rb), perl (pl), haskell (hs), clojure (clj), php (php), bash (sh), cpp (c++), gcc (c), java (java)
+<you> c> printf("Hi IRC!");
+<rccvm> [output] Hi IRC!
+```
+
+Contact me if you want rccvm to join your channel :)
+
 ## Example Task Request (Queue)
 
 Here is a simple example that uses the task queue which asynchronously executes the code:
