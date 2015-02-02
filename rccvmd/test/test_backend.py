@@ -205,6 +205,21 @@ class JavaScriptBackendTest(unittest.TestCase):
                 'main.js': {'data': 'console.log("Hello World")'}}})
         self.assertEquals(res['run']['stdout'], 'Hello World\n')
 
+class GoBackendTest(unittest.TestCase):
+
+    def setUp(self):
+        self.runner = backend.Runner()
+
+    def test_compile(self):
+        res = self.runner.delegate({
+            'backend': 'go',
+            'files': {
+                'main.go': {'data': """
+                package main
+                import "fmt"; func main() { fmt.Printf("Hello World") }
+                """}}})
+        self.assertEquals(res['run']['stdout'], 'Hello World')
+
 if __name__ == '__main__':
     unittest.main()
 
