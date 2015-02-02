@@ -181,6 +181,29 @@ class ClojureBackendTest(unittest.TestCase):
                 'main.clj': {'data': '(println "Hello World")'}}})
         self.assertEquals(res['run']['stdout'], 'Hello World\n')
 
+class CommonLispBackendTest(unittest.TestCase):
+
+    def setUp(self):
+        self.runner = backend.Runner()
+
+    def test_compile(self):
+        res = self.runner.delegate({
+            'backend': 'commonlisp',
+            'files': {
+                'main.lisp': {'data': '(format t "Hello World")'}}})
+        self.assertEquals(res['run']['stdout'], 'Hello World')
+
+class JavaScriptBackendTest(unittest.TestCase):
+
+    def setUp(self):
+        self.runner = backend.Runner()
+
+    def test_compile(self):
+        res = self.runner.delegate({
+            'backend': 'javascript',
+            'files': {
+                'main.js': {'data': 'console.log("Hello World")'}}})
+        self.assertEquals(res['run']['stdout'], 'Hello World\n')
 
 if __name__ == '__main__':
     unittest.main()
