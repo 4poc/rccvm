@@ -1,12 +1,25 @@
 # RCCVM - sandboxed code executioner
 
-This project lets you execute untrusted source code in a safe environment. You submit code for compilation/execution through a json-based web interface (see api docs) that is then run inside a qemu virtual machine.
+![rccvm overview](http://apoc.cc/rccvm_overview.png)
 
-The vm is only exposed through a forwarded port (for the internal code runner) this bases its (network) security on the `restrict=y` feature for host-guest network isolation in qemu. It should be noted that qemu had [security issues](http://www.cvedetails.com/vulnerability-list/vendor_id-7506/Qemu.html) in the past that could potentially lead an attacker to gain access on the host.
+Runner for user submitted (untrusted) source code. Clients submit code through a [HTTP interface](https://github.com/4poc/rccvm/wiki) the code is then compiled/run in an isolated qemu virtual machine and sent back to the client.
 
-The vm is running debian GNU/linux, the disk image is hosted [separately](http://apoc.cc/rccvm/).
+Within the vm runs a code dispatching server that is exposed through a forwarded port, this uses the user networking feature of qemu and network access is restricted to this one port. It should be noted that qemu had [security issues](http://www.cvedetails.com/vulnerability-list/vendor_id-7506/Qemu.html) in the past that could potentially lead an attacker to gain access on the host.
 
-Check the github wiki for a detailed api documentation.
+The vm is running Debian GNU/Linux, the disk image is hosted [separately](http://apoc.cc/rccvm/).
+
+## Try It
+
+To try it out you can query the bot 'rccvm' on either Freenode or Quakenet IRC:
+
+```
+<you> /msg rccvm help rccvm
+<rccvm> execute code: (lang)> (code) | languages: python2 (py), python3 (py3), scala (sc), tcl (tcl), ruby (rb), perl (pl), haskell (hs), clojure (clj), php (php), bash (sh), cpp (c++), gcc (c), java (java)
+<you> c> printf("Hi IRC!");
+<rccvm> [output] Hi IRC!
+```
+
+Contact me if you want rccvm to join your channel :)
 
 ## Example Task Request (Queue)
 
